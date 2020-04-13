@@ -1,5 +1,6 @@
 from app import app
 from flask import Flask, render_template, jsonify
+#from pymongo import MongoClient
 import json
 import requests
 import random
@@ -13,7 +14,11 @@ source_URL="https://api.covid19api.com/all"
 
 def datetri(M):
     return M[1]
-
+    
+"""Fonction qui va récupérer le json dasn l'API cible
+response = url cible
+content = json cible
+"""
 @app.route('/infoglobal/')
 def getinfoglobal():
     response = requests.get(source_URL)
@@ -30,7 +35,7 @@ def getinfoglobal():
         
         data = [] # On initialise une liste vide
     
-        #Avec foreach 
+        #Avec foreach on prépare le json de sotie 
         for prev in content["list"]:
             pays=prev['Country']
             nbcas=prev['Cases']
@@ -46,6 +51,7 @@ def getinfoglobal():
         
         time.sleep(86400)
 
+#Si le main est dans le code et pas importé, il lance la fonction
 if __name__ == "__main__":
     app.run()
 
