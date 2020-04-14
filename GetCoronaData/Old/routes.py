@@ -1,6 +1,6 @@
-from app import app
+#from app import app
 from flask import Flask, render_template, jsonify
-#from pymongo import MongoClient
+from pymongo import MongoClient
 import json
 import requests
 import random
@@ -8,8 +8,10 @@ import datetime
 import time
 
 source_URL="https://api.covid19api.com/all"
+client = MongoClient('192.168.99.100:27017')
+db=client.scrapervince
 
-@app.route('')
+#@app.route('')
 # c'est ici qu'on défini notre "DataLake" ?
 
 def datetri(M):
@@ -19,7 +21,6 @@ def datetri(M):
 response = url cible
 content = json cible
 """
-@app.route('/infoglobal/')
 def getinfoglobal():
     response = requests.get(source_URL)
     content = json.loads(response.content.decode('utf-8'))
@@ -32,17 +33,18 @@ def getinfoglobal():
     t=True
 
     while(t) :
-        
         data = [] # On initialise une liste vide
-    
-        #Avec foreach on prépare le json de sotie 
+        
         for prev in content["list"]:
             pays=prev['Country']
             nbcas=prev['Cases']
             status=prev['Status']
             date=prev['Date']
             data.append([pays, nbcas,status, date])
+            print(prev)
         sorted(data,key=datetri)
+        
+        #résultat = db.reviews.insert_one (data) 
  
         return jsonify({
         'status': 'ok', 
@@ -51,7 +53,9 @@ def getinfoglobal():
         
         time.sleep(86400)
 
+
+getinfoglobal()
 #Si le main est dans le code et pas importé, il lance la fonction
-if __name__ == "__main__":
-    app.run()
+"""if __name__ == "__main__":
+    app.run()"""
 
