@@ -18,27 +18,32 @@ import urllib
 import requests
 import json
 
-#Connection à la BDD /!\ /!\ /!\ En local à changer
+# Connection à la BDD /!\ /!\ /!\ En local à changer
 client = MongoClient('192.168.99.100:27017')
-db=client.scrapervince
-resultsGlob=[]
+
 
 """Fonctions qui récupère les URL des résultats de la recherche
     query = str mot  recherché
     nbpages = int nbre de pages à scraper
     """
+
+
 def getSites(query, nbpages):
-    USER_AGENT =  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.92 Safari/537.36"
+    keyword = query
+    db = client.scraper
+    resultsGlob = []
+
+    USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.92 Safari/537.36"
     pagenum = 0
-    
+
     while pagenum <= nbpages:
-        query = query +"&start="+str(pagenum)
-        query.replace(" ","+")
+        query = query + "&start="+str(pagenum)
+        query.replace(" ", "+")
         URL = f"https://google.com/search?q={query}"
 
         resultsGlob = []
         results = []
-        search=[]
+        search = []
 
         headers = {"user-agent": USER_AGENT}
         resp = requests.get(URL, headers=headers)
@@ -53,9 +58,14 @@ def getSites(query, nbpages):
                     item = {
                         "title": title,
                         "link": link,
-                        "shortdescription": shortdescription
+                        "shortdescription": shortdescription,
+                        "ref": keyword
                     }
-                    résultat = db.reviews.insert_one (item)      
-        pagenum=pagenum+1
+                    résultat = db.reviews.insert_one(item)
+        pagenum = pagenum + 1
 
-getSites("covid 19",5)
+        
+search = ["covid 19", "corona virus", "covid actu", "confinement"]
+
+for word in search:
+    getSites(word, 5)
