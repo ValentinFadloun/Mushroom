@@ -1,0 +1,2 @@
+# Ignore le fichier pour import direct dans kibana 
+tests/import_csv_es.py
