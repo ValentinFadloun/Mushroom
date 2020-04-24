@@ -1,7 +1,7 @@
 # Import d'elasticsearch
 from elasticsearch import Elasticsearch, helpers
 
-es = Elasticsearch([{'host': '192.168.99.100', 'port': '9200'}], http_auth=('elastic', 'changeme'))
+es = Elasticsearch([{'host': 'localhost', 'port': '9200'}], http_auth=('elastic', 'changeme'))
 
 import json
 
