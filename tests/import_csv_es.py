@@ -11,7 +11,7 @@ def generate_data():
         data = json.load(jsonfile)
         for json_object in data["Countries"]:
             yield {
-                "_index": "sars_2003",
+                "_index": "covid_19",
                 "_type":"doc",
                 "_source": json_object
             }
