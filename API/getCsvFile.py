@@ -6,6 +6,7 @@ Permet le téléchargement des données aux formats csv des urgences hospitalié
 fait une copie local du csv puis le supprime.
 L'entête du fichier n'a aucune importance, il est créé dynamiquement.
 Mais à jour les données totu les jours
+MAJ 27/04/2020 : Ne prend pas en compte les lignes de commentaires (commencant par #) et prend en compte les séparateur ';'
 """
 from flask import Flask, render_template, jsonify
 from pymongo import MongoClient
@@ -19,34 +20,26 @@ import os
 # Connection à la BDD /!\ /!\ /!\ En local à changer
 client = MongoClient('192.168.99.100:27017')
 
-"""récupère les datas tout les jours 
-    source_URL = url
-    dbname = Nom_de_la_bdd"""
 
-
-def getGlobal(source_URL, dbname, name):
+def getGlobal(source_URL, dbname, name, sep):
     db = dbname
     dbnames = client.list_database_names()
 
-    t = True
+    if name in dbnames:
+        dbname.reviews.drop()
+    i = 0
+    entete = []
+    with open('tempdata.csv', "wb") as file:
+        # get request
+        response = requests.get(source_URL)
+        # write to file
+        file.write(response.content)
 
-    while(t):
-        if name in dbnames:
-            dbname.reviews.drop()
-
-        i = 0
-        entete = []
-
-        with open('tempdata.csv', "wb") as file:
-            # get request
-            response = requests.get(source_URL)
-            # write to file
-            file.write(response.content)
-
-        # Charger le csv
-        with open('tempdata.csv') as csvFile:
-            reader = csv.reader(csvFile)
-            for row in reader:
+    # Charger le csv
+    with open('tempdata.csv') as csvFile:
+        reader = csv.reader(csvFile, delimiter=sep)
+        for row in reader:
+            if row[0].find('#'):
                 if (i == 0):
                     # Récupère l'entête
                     for column in row:
@@ -63,9 +56,27 @@ def getGlobal(source_URL, dbname, name):
 
                     db.reviews.insert_one(item)
 
-        os.remove('tempdata.csv')
-        time.sleep(86400)
+    os.remove('tempdata.csv')
 
 
-getGlobal('https://www.data.gouv.fr/fr/datasets/r/eceb9fb4-3ebc-4da3-828d-f5939712600a',
-          client.resulthostoData, 'resulthostoData')
+t = True
+"""récupère les datas tout les jours 
+    source_URL = url
+    dbname = Nom_de_la_bdd"""
+while(t):
+    getGlobal('https://www.data.gouv.fr/fr/datasets/r/eceb9fb4-3ebc-4da3-828d-f5939712600a',
+              client.gouv_fr_resulthostoData, 'gouv_fr_resultHosto', ',')
+
+    getGlobal('https://www.data.gouv.fr/fr/datasets/r/f4935ed4-7a88-44e4-8f8a-33910a151d42',
+              client.gouv_fr_evoljourpays, 'gouv_fr_evoljourpays', ';')
+
+    getGlobal('https://www.data.gouv.fr/fr/datasets/r/15a5a5b8-8330-48a0-a385-e01b326d2213',
+              client.gouv_fr_evoljourpays, 'gouv_fr_evoljourpays', ';')
+
+    getGlobal('https://www.data.gouv.fr/fr/datasets/r/6fadff46-9efd-4c53-942a-54aca783c30c',
+              client.gouv_fr_nouveauCovid, 'gouv_fr_nouveauCovid', ';')
+
+    getGlobal('https://www.data.gouv.fr/fr/datasets/r/08c18e08-6780-452d-9b8c-ae244ad529b3',
+              client.gouv_fr_casAge, 'gouv_fr_casAge', ';')
+
+    time.sleep(86400)

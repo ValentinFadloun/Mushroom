@@ -22,14 +22,10 @@ client = MongoClient('192.168.99.100:27017')
     source_URL = url
     dbname = Nom_de_la_bdd"""
 
-
 def getGlobal(source_URL, dbname, name):
     db = dbname
     dbnames = client.list_database_names()
 
-  #  t = True
-
-   # while(t):
     if name in dbnames:
         dbname.reviews.drop()
 
@@ -51,8 +47,11 @@ def getGlobal(source_URL, dbname, name):
         # db.reviews.insert_one(prev)
 
     os.remove('tempdata.json')
-    # time.sleep(86400)
 
+#t = True
+#while(t):
 
 getGlobal('https://www.data.gouv.fr/fr/datasets/r/a7596877-d7c3-4da6-99c1-2f52d418e881',
           client.evolData, 'evolData')
+
+    #time.sleep(86400)
