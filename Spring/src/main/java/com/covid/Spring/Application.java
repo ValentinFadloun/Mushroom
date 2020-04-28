@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.covid.Spring.models.mongo.Test;
 import com.covid.Spring.services.TestService;
+import com.covid.Spring.services.impl.TestServiceImpl;
 
 @SpringBootApplication
 public class Application {
@@ -15,6 +16,7 @@ public class Application {
 	
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
+
 	}
 
 }
