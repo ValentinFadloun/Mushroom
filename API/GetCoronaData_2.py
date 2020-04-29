@@ -34,4 +34,8 @@ def getGlobal(source_URL, dbname):
         for prev in content:
             db.reviews.insert_one(prev)
 
-getGlobal("https://api.covid19api.com/all",client.resultcovid19api_all)
+
+t = True
+while(t):
+    getGlobal("https://api.covid19api.com/all", client.resultcovid19api_all)
+    time.sleep(86400)
