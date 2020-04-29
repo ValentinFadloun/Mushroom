@@ -9,8 +9,9 @@ from pymongo import MongoClient
 import json
 import requests
 import time
+from datetime import datetime
 
-#Connection à la BDD /!\ /!\ /!\ En local à changer
+# Connection à la BDD /!\ /!\ /!\ En local à changer
 client = MongoClient('192.168.99.100:27017')
 
 """récupère les datas tout les jours 
@@ -22,21 +23,15 @@ def getGlobal(source_URL, dbname):
     content = json.loads(response.content.decode('utf-8'))
     dbnames = client.list_database_names()
     new=0
-    t=True
-
-    while(t) :
-        if 'resultcovid19api' in dbnames:
-            for prev in content:
-                try :
-                    ishere=db.reviews.find_one(prev).get('_id')
-                    data=prev
-                    db.reviews.update_one({'_id':ishere}, {"$set": data}, upsert=True)
-
-                except:
-                    db.reviews.insert_one(prev)
-        elif not 'resultcovid19api' in dbnames:
-            for prev in content:
+    
+    print(db.reviews.find_one(datetime.now()))
+    if 'resultcovid19api_all' in dbnames:
+        for prev in content:
+            ishere = db.reviews.find_one(prev)
+            if not ishere:
                 db.reviews.insert_one(prev)
-        time.sleep(86400)   
+    elif not 'resultcovid19api_all' in dbnames:
+        for prev in content:
+            db.reviews.insert_one(prev)
 
 getGlobal("https://api.covid19api.com/all",client.resultcovid19api_all)
