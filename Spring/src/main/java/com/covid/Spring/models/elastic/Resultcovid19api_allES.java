@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 @Data
-@Document(indexName = "Resultcovid19api_allES")
+@Document(indexName = "covid19api_alles")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Resultcovid19api_allES {

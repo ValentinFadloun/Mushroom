@@ -3,3 +3,4 @@ spring:
     rest:
       password: changeme
       username: elastic
+spring.data.mongodb.uri : mongodb://localhost/test # Mongo database URI. When set, host and port are ignored.

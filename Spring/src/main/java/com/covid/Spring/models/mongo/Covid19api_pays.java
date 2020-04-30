@@ -10,24 +10,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document("covid19api_all")
+@Document(collection = "covid19api_pays")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Resultcovid19api_all {
+
+public class Covid19api_pays {
+
 	@Id
 	private String id;
-	private String country;
-	private String countryCode;
-	private String province;
-	private String city;
-	private String cityCode;
-	private String lat;
-	private String lon;
-	private int confirmed;
-	private int deaths;
-	private int recovered;
-	private int active;
+	private double tauxDeces;
+	private String pays;
+	private int guerisons;
+	private int infection;
+	private double tauxInfection;
+	private int deces;
 	private String date;
-	
+	private double tauxGuerison;
+
 }
