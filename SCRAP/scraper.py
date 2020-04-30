@@ -8,15 +8,17 @@ Extrait : Le titre
           URL
           ShortDescription
 Utilise BeautifulSoup.
+MAJ 30/04/2020 : Update les données + ajouts du champ date + boucle infini
 """
 from bs4 import BeautifulSoup
 from splinter import browser
 from pymongo import MongoClient
 from pprint import pprint
-
+from datetime import datetime
 import urllib
 import requests
 import json
+import time
 
 # Connection à la BDD /!\ /!\ /!\ En local à changer
 client = MongoClient('192.168.99.100:27017')
@@ -26,11 +28,9 @@ client = MongoClient('192.168.99.100:27017')
     query = str mot  recherché
     nbpages = int nbre de pages à scraper
     """
-
-
 def getSites(query, nbpages):
     keyword = query
-    db = client.scraper
+    db = client.google_scraper
     resultsGlob = []
 
     USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.92 Safari/537.36"
@@ -56,16 +56,22 @@ def getSites(query, nbpages):
                     title = g.find('h3').text
                     shortdescription = g.find('a').text
                     item = {
+                        "Date": str(datetime.now()),
                         "title": title,
                         "link": link,
                         "shortdescription": shortdescription,
                         "ref": keyword
                     }
-                    résultat = db.reviews.insert_one(item)
+                    if not db.reviews.find_one(item):
+                        db.reviews.insert_one(item)
         pagenum = pagenum + 1
 
-        
+# Liste de mots recherché
 search = ["covid 19", "corona virus", "covid actu", "confinement"]
 
-for word in search:
-    getSites(word, 5)
+t = True
+while(t):
+    for word in search:
+        getSites(word, 5)
+    print("C'est tout pour aujourd'hui, nouvelles entrées, à demain !")
+    time.sleep(86400)

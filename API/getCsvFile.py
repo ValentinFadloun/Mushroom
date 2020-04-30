@@ -55,7 +55,6 @@ def getGlobal(source_URL, dbname, name, sep):
                     # Compare le dictionnaire avec la BDD si n'éxiste pas insére
                     if not db.reviews.find_one(item):
                         db.reviews.insert_one(item)
-                        print("Add 1")
     # Supprime le fichier temp
     os.remove('tempdata.csv')
 
