@@ -7,6 +7,7 @@ fait une copie local du csv puis le supprime.
 L'entête du fichier n'a aucune importance, il est créé dynamiquement.
 Mais à jour les données totu les jours
 MAJ 27/04/2020 : Ne prend pas en compte les lignes de commentaires (commencant par #) et prend en compte les séparateur ';'
+MAJ 30/04/2020 : MAJ du système d'update
 """
 from flask import Flask, render_template, jsonify
 from pymongo import MongoClient
@@ -24,18 +25,16 @@ client = MongoClient('192.168.99.100:27017')
 def getGlobal(source_URL, dbname, name, sep):
     db = dbname
     dbnames = client.list_database_names()
-
-    if name in dbnames:
-        dbname.reviews.drop()
     i = 0
     entete = []
+
     with open('tempdata.csv', "wb") as file:
         # get request
         response = requests.get(source_URL)
         # write to file
         file.write(response.content)
 
-    # Charger le csv
+    # Charger le csv dans un fichier temp
     with open('tempdata.csv') as csvFile:
         reader = csv.reader(csvFile, delimiter=sep)
         for row in reader:
@@ -44,7 +43,7 @@ def getGlobal(source_URL, dbname, name, sep):
                     # Récupère l'entête
                     for column in row:
                         entete.append(column)
-                    i += 1
+                        i += 1
                 else:
                     for column in row:
                         item = {}
@@ -53,16 +52,18 @@ def getGlobal(source_URL, dbname, name, sep):
                             # Créé le dictionnaire
                             item[str(col)] = row[i]
                             i += 1
-
-                    db.reviews.insert_one(item)
-
+                    # Compare le dictionnaire avec la BDD si n'éxiste pas insére
+                    if not db.reviews.find_one(item):
+                        db.reviews.insert_one(item)
+                        print("Add 1")
+    # Supprime le fichier temp
     os.remove('tempdata.csv')
 
 
 t = True
-"""récupère les datas tout les jours 
-    source_URL = url
-    dbname = Nom_de_la_bdd"""
+"""récupère les datas tout les jours
+     source_URL = url
+     dbname = Nom_de_la_bdd"""
 while(t):
     getGlobal('https://www.data.gouv.fr/fr/datasets/r/eceb9fb4-3ebc-4da3-828d-f5939712600a',
               client.gouv_fr_resulthostoData, 'gouv_fr_resultHosto', ',')
@@ -79,4 +80,5 @@ while(t):
     getGlobal('https://www.data.gouv.fr/fr/datasets/r/08c18e08-6780-452d-9b8c-ae244ad529b3',
               client.gouv_fr_casAge, 'gouv_fr_casAge', ';')
 
+    print("C'est tout pour aujourd'hui, nouvelles entrées, à demain !")
     time.sleep(86400)
