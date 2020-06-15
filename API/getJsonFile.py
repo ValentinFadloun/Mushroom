@@ -16,7 +16,7 @@ import time
 import os
 
 # Connection à la BDD /!\ /!\ /!\ En local à changer
-client = MongoClient('192.168.99.100:27017')
+client = MongoClient('localhost:27017')
 
 """récupère les datas tout les jours 
     source_URL = url

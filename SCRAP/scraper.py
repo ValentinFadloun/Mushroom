@@ -9,6 +9,7 @@ Extrait : Le titre
           ShortDescription
 Utilise BeautifulSoup.
 MAJ 30/04/2020 : Update les données + ajouts du champ date + boucle infini
+pip install dnspython
 """
 from bs4 import BeautifulSoup
 from splinter import browser
@@ -21,7 +22,7 @@ import json
 import time
 
 # Connection à la BDD /!\ /!\ /!\ En local à changer
-client = MongoClient('192.168.99.100:27017')
+client = MongoClient('localhost:27017')
 
 
 """Fonctions qui récupère les URL des résultats de la recherche
@@ -67,11 +68,11 @@ def getSites(query, nbpages):
         pagenum = pagenum + 1
 
 # Liste de mots recherché
-search = ["covid 19", "corona virus", "covid actu", "confinement"]
+search = ["covid 19", "corona virus", "covid actu", "confinement", "deconfinement"]
 
 t = True
 while(t):
     for word in search:
-        getSites(word, 5)
+        getSites(word, 1)
     print("C'est tout pour aujourd'hui, nouvelles entrées, à demain !")
     time.sleep(86400)
