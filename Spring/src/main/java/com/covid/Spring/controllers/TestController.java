@@ -1,8 +1,12 @@
 package com.covid.Spring.controllers;
 
+import java.util.List;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,13 +31,18 @@ public class TestController {
 
 	@PostMapping("")
 	public Resultcovid19api_all save(@RequestBody Resultcovid19api_all data) {
-		System.out.println(data);
+		System.out.println("save mongo : "+data);
 		return this.resultcovid19api_allService.save(data);
 	}
 
+	@GetMapping("{date}")
+	public List<Resultcovid19api_all> findAllByDate(@PathVariable String date) {
+		return this.resultcovid19api_allService.findAllByDate(date);
+	}
+	
 	@GetMapping("")
-	public void saveAll() {
-		this.resultcovid19api_allService.saveAll();
+	public String  findAllByCurrentDate() {
+		return " *** "+this.resultcovid19api_allService.saveTodayDataES() +" documents ont été rajoutés dans ES ***";
 	}
 	
 	@PostMapping("pays")
@@ -42,4 +51,3 @@ public class TestController {
 		return this.covid19api_paysService.save(data);
 	}
 }
-	

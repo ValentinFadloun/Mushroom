@@ -36,16 +36,15 @@ def getGlobal(source_URL, dbname, name):
         # get request
         response = requests.get(source_URL)
         # write to file
-        file.write(response.content)
+        file.write(response.content.lower())
 
         # Charger le csv
     with open('tempdata.json') as jsonFile:
         reader = json.load(jsonFile)
-        mylist = [reader]
+        mylist = reader['globaldata']
         db.reviews.insert_many(mylist)
-
-        # db.reviews.insert_one(prev)
-
+        
+            
     os.remove('tempdata.json')
 
 #t = True

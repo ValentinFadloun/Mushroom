@@ -18,32 +18,32 @@ import lombok.NoArgsConstructor;
 public class Resultcovid19api_allES {
 	@Id
 	private String id;
-	private String Country;
-	private String CountryCode;
-	private String Province;
-	private String City;
-	private String CityCode;
-	private String Lat;
-	private String Lon;
-	private int Confirmed;
-	private int Deaths;
-	private int Recovered;
-	private int Active;
-	private String Date;
+	private String country;
+	private String countryCode;
+	private String province;
+	private String city;
+	private String cityCode;
+	private String lat;
+	private String lon;
+	private int confirmed;
+	private int deaths;
+	private int recovered;
+	private int active;
+	private String date;
 	
 	public Resultcovid19api_allES(Resultcovid19api_all data) {
 		this.id = data.getId();
-		this.Country = data.getCountry();
-		this.CountryCode = data.getCountryCode();
-		this.Province = data.getProvince();
-		this.City = data.getCity();
-		this.CityCode = data.getCityCode();
-		this.Lat = data.getLat();
-		this.Lon = data.getLon();
-		this.Confirmed = data.getConfirmed();
-		this.Deaths = data.getDeaths();
-		this.Recovered = data.getRecovered();
-		this.Active = data.getActive();
-		this.Date = data.getDate();
+		this.country = data.getCountry();
+		this.countryCode = data.getCountryCode();
+		this.province = data.getProvince();
+		this.city = data.getCity();
+		this.cityCode = data.getCityCode();
+		this.lat = data.getLat();
+		this.lon = data.getLon();
+		this.confirmed = data.getConfirmed();
+		this.deaths = data.getDeaths();
+		this.recovered = data.getRecovered();
+		this.active = data.getActive();
+		this.date = data.getDate();
 	}
 }

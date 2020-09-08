@@ -25,7 +25,7 @@ public class WrapperResultcovid19api_all {
 	    /**
 	     * @param persons the persons to set
 	     */
-	    public void setPersons(List<Resultcovid19api_all> data) {
+	    public void getResultcovid19api_all(List<Resultcovid19api_all> data) {
 	        this.data = data;
 	    }
 	

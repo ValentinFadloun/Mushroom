@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "covid19api_pays")
+@Document(collection = "evolData")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

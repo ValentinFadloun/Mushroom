@@ -30,11 +30,8 @@ def getGlobal(source_URL, dbname, name):
     if name in dbnames:
     # Parcours les données de l'API
         for prev in content:
-            # Si les données en BDD n'existent pas on les insère
-            if not db.reviews.find_one(prev):
-                db.reviews.insert_one(prev)
-    else:
-        db.reviews.insert_many(content)
+            prev = {k.lower() : v for k, v in prev.items()}
+            db.reviews.insert_one(prev)
 
 
 t = True

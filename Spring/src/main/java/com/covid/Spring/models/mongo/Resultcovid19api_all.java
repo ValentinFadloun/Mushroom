@@ -4,13 +4,14 @@
 package com.covid.Spring.models.mongo;
 
 import org.springframework.data.annotation.Id;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document("covid19api_all")
+@Document(collection ="reviews")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

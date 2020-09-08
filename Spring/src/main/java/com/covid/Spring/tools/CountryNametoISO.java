@@ -1,4 +1,5 @@
 /**
+
  * 
  */
 package com.covid.Spring.tools;
@@ -17,9 +18,9 @@ public class CountryNametoISO {
 
 	String pathToCsv = "";
 
-	static String csvFile = "C:/Users/Thomas/Downloads/sql-pays.csv";
+	private static String csvFile = "C:\\Users\\Thomas\\git\\Mushroom\\DATA\\sql-pays.csv";
 	BufferedReader br = null;
-	static String COMMA_DELIMITER = ";";
+	private static String COMMA_DELIMITER = ";";
 
 	public static List<List<String>> readCsvToArray() {
 
@@ -40,16 +41,13 @@ public class CountryNametoISO {
 	}
 
 	public static String getValueFromCsv(String value,PaysCsv from,PaysCsv to) {
-		Stream<List<String>> test = readCsvToArray().stream();
+		Stream<List<String>> flux = readCsvToArray().stream();
 		Optional<List<String>> result =
-			    test.filter(pays -> pays.get(from.indice).equalsIgnoreCase(value))
+				flux.filter(pays -> pays.get(from.indice).equalsIgnoreCase(value))
 			    .findFirst();
 		if(result.isPresent()) return result.get().get(to.indice);
-		return "empty";
+		return "";
 		
 	}
-//	public static void main(String[] args) {
-//		System.out.println(getValueFromCsv("France",PaysCsv.NOMPAYSFR, PaysCsv.ISOCODE3));
-//	}
 
 }
